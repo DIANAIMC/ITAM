@@ -1,0 +1,17 @@
+#! /bin/bash
+
+docker stop mongo # Para el contenedor mongo
+docker rm mongo # Remueve el contenedor mongo
+export DATA_DIR=`pwd`/data # Exporta la dirección donde se encuentra data
+echo $DATA_DIR # Imprime la dirección
+export EX_DIR=`pwd`/mongodb-sample-dataset  #Exporta la dirección donde se encuentra mongodb-sample-dataset
+echo $EX_DIR # Imprime la direccion
+mkdir -p $DATA_DIR # Crea el directorio de forma recursiva con la ruta de data
+docker run -p 27017:27017 \ # Crea un nuevo contenedor y lo incia. Se le asigna el puerto 27017
+       -v $DATA_DIR:/data/db \ # Creando el primer volumen de data_dir
+       -v $EX_DIR:/mongodb-sample-dataset \ # Creando el segundo volumen de ex_dir
+       --name mongo \ # Se le asigna el nombre mongo
+       -d mongo #Corre el container e imprime su id
+export DHC=$(docker ps -aqf "name=mongo") # Obtiene el id del docker con el nombre mongo
+sleep 2 # La maquina espera 2 milisegundos antes de correr el siguiente comando, para que le de tiempo de hacer el comando anterior
+docker exec -it $DHC mongosh # Ejecuta la terminar 

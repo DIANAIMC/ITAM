@@ -1,0 +1,12 @@
+#! /bin/bash
+
+#  docker volume remove monet-data
+docker volume create monet-data
+docker stop monetdb
+docker rm monetdb
+sudo docker run \
+       -v $PWD/data:/tmp/new \
+       -v monet-data:/var/monetdb5/dbfarm \
+       -p 50001:50000 \
+       --name monetdb \
+       -d monetdb/monetdb:latest
