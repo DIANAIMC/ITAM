@@ -1,0 +1,25 @@
+#Correr mongo (emergencia)
+sudo dockerd &
+sudo  ./mongo_script
+. ./mongo_script
+
+#Importar json a Mongo
+cat restaurants.json | docker exec -i $DHC mongoimport --db=reviews --collection=restaurants
+
+#Importar sql a Monet
+docker exec -i monetdb  mclient -d voc - <  voc_dump.sql
+cat voc_dump.sql | docker exec -i monetdb  mclient -d voc -
+
+#Correr comandos sobre la bd de monet
+docker exec -it monetdb /bin/bash
+#Para crear una nueva bd en Monet, tenemos que correr:
+docker exec -it monetdb  mclient -u monetdb -d ecobici
+#Ahora para entrar en el shell de monetdb de una bd, corremos el siguiente comando:
+docker exec -it monetdb mclient (nombre de la bd)
+docker exec -it monetdb  mclient -u monetdb -d ecobici #-u usario  -d bd
+
+#Tumbar postgres
+docker stop  postgres
+
+#Vamos ahora a importar la BD que descargamos:
+cat voc_dump.sql > docker exec -i monetdb mclient -u voc -d voc
