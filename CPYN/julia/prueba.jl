@@ -1,0 +1,1 @@
+@code_native 2+2
